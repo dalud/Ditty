@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         hh = new int[]{1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1};
         snare = new int[]{0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0};
         step = 1000/(tempo/30);
-        hihaT = new InstrumentTrack(tempo, beats, cursor, hh, step, hhMP);
-        kickT = new InstrumentTrack(tempo, beats, cursor, kick, step, kickMP);
-        snareT = new InstrumentTrack(tempo, beats, cursor, snare, step, snareMP);
+        hihaT = new InstrumentTrack(hh, hhMP);
+        kickT = new InstrumentTrack(kick, kickMP);
+        snareT = new InstrumentTrack(snare, snareMP);
 
 
         Button A = (Button) findViewById(R.id.a);
@@ -51,33 +51,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void play() {
-        long time = System.currentTimeMillis();
-        long elapsed;
-        cursor = 0;
 
-        while(cursor < beats) {
-            elapsed = System.currentTimeMillis() - time;
-
-            if(elapsed == step) {
-                if(hh[cursor] != 0){
-                    if(hhMP.isPlaying()) hhMP.seekTo(0);
-                    else hhMP.start();
-                }
-                if(kick[cursor] != 0){
-                    if(kickMP.isPlaying()) kickMP.seekTo(0);
-                    else kickMP.start();
-                }
-                if(snare[cursor] != 0){
-                    if(snareMP.isPlaying()) snareMP.seekTo(0);
-                    else snareMP.start();
-                }
-                time = System.currentTimeMillis();
-                cursor++;
+        while(true){
+            if (hhMP.isPlaying()) hhMP.seekTo(0);
+            else hhMP.start();
+            try {
+                Thread.sleep(step);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

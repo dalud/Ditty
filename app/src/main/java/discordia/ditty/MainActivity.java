@@ -1,20 +1,24 @@
 package discordia.ditty;
 
-import android.media.MediaPlayer;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-
 public class MainActivity extends AppCompatActivity {
 
-    int tempo, beats, cursor, step;
-    int[] kick, snare, hh;
-
-    MediaPlayer kickMP, snareMP, hhMP;
-    InstrumentTrack hhT, kickT, snareT;
+    int tempo;
+    int beats;
+    int cursor;
+    int step;
+    static int hhId;
+    static int kickId;
+    static int snareId;
+    static int[] kick, snare, hh;
+    SoundPool pool;
+    InstrumentTrack track;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,37 +26,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.getWindow().setBackgroundDrawableResource(R.drawable.layout);
 
-        kickMP = MediaPlayer.create(this, R.raw.kick);
-        snareMP = MediaPlayer.create(this, R.raw.snare);
-        hhMP = MediaPlayer.create(this, R.raw.hihat);
+        pool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        hhId = pool.load(this, R.raw.hihat, 1);
+        kickId = pool.load(this, R.raw.kick, 1);
+        snareId = pool.load(this, R.raw.snare, 1);
 
-        tempo = 120;
+        tempo = 160;
         beats = 16;
         cursor = 0;
+        step = 1000/(tempo/30);
+
+        //default ON-LOAD song:
         kick = new int[]{1,0,0,0, 1,1,0,0, 1,1,0,1, 0,1,0,0};
         hh = new int[]{1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1};
         snare = new int[]{0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0};
-        step = 1000/(tempo/30);
-        hhT = new InstrumentTrack(hh, hhMP, step);
-        kickT = new InstrumentTrack(kick, kickMP, step);
-        snareT = new InstrumentTrack(snare, snareMP, step);
+        track = new InstrumentTrack(step, cursor, beats, pool);
 
 
-        Button A = (Button) findViewById(R.id.a);
-        A.setOnTouchListener(new View.OnTouchListener(){
+
+        Button Play = (Button) findViewById(R.id.play);
+        Play.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    play();
-                }
-                return false;
+            public void onClick(View v) {
+                track.start();
             }
         });
-
-    }
-    public void play() {
-
-        hhT.start();
+        Button Stop = (Button) findViewById(R.id.stop);
+        Stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                track.setPlaying(false);
+            }
+        });
     }
 
     @Override

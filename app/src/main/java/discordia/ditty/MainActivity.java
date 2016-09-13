@@ -10,11 +10,11 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    int tempo, beats, cursor;
+    int tempo, beats, cursor, step;
     int[] kick, snare, hh;
-    long step;
+
     MediaPlayer kickMP, snareMP, hhMP;
-    InstrumentTrack hihaT, kickT, snareT;
+    InstrumentTrack hhT, kickT, snareT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         hh = new int[]{1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1};
         snare = new int[]{0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0};
         step = 1000/(tempo/30);
-        hihaT = new InstrumentTrack(hh, hhMP);
-        kickT = new InstrumentTrack(kick, kickMP);
-        snareT = new InstrumentTrack(snare, snareMP);
+        hhT = new InstrumentTrack(hh, hhMP, step);
+        kickT = new InstrumentTrack(kick, kickMP, step);
+        snareT = new InstrumentTrack(snare, snareMP, step);
 
 
         Button A = (Button) findViewById(R.id.a);
@@ -52,15 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void play() {
 
-        while(true){
-            if (hhMP.isPlaying()) hhMP.seekTo(0);
-            else hhMP.start();
-            try {
-                Thread.sleep(step);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        hhT.start();
     }
 
     @Override

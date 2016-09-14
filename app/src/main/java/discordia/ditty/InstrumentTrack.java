@@ -5,7 +5,7 @@ import android.media.SoundPool;
 /**
  * Created by dalud on 10.9.2016.
  */
-public class InstrumentTrack {
+public class InstrumentTrack extends Thread{
 
     int step, cursor, beats;
     SoundPool pool;
@@ -22,11 +22,9 @@ public class InstrumentTrack {
         this.playing = playing;
     }
 
-    public void start() {
+    public void run(){
 
-        while (cursor < beats) {
-            if (!playing) break;
-
+        while (cursor < beats && playing) {
             if (MainActivity.kick[cursor] != 0) {
                 pool.play(MainActivity.kickId, 1, 1, 1, 0, 1);
             }
@@ -36,7 +34,6 @@ public class InstrumentTrack {
             if (MainActivity.snare[cursor] != 0) {
                 pool.play(MainActivity.snareId, 1, 1, 1, 0, 1);
             }
-
             try {
                 Thread.sleep(step);
             } catch (InterruptedException e) {

@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         Play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                track.setPlaying(true);
                 track.start();
             }
         });

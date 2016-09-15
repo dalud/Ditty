@@ -40,23 +40,22 @@ public class MainActivity extends AppCompatActivity {
         kick = new int[]{1,0,0,0, 1,1,0,0, 1,1,0,1, 0,1,0,0};
         hh = new int[]{1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1};
         snare = new int[]{0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0};
-        track = new InstrumentTrack(step, cursor, beats, pool);
-
 
 
         Button Play = (Button) findViewById(R.id.play);
         Play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                track = new InstrumentTrack(step, cursor, beats, pool);
                 track.setPlaying(true);
                 track.start();
-            }
+                   }
         });
         Button Stop = (Button) findViewById(R.id.stop);
         Stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                track.setPlaying(false);
+                track.stopp();
             }
         });
     }

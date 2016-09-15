@@ -21,10 +21,11 @@ public class InstrumentTrack extends Thread{
     public void setPlaying(boolean playing) {
         this.playing = playing;
     }
-
+    @Override
     public void run(){
 
         while (cursor < beats && playing) {
+
             if (MainActivity.kick[cursor] != 0) {
                 pool.play(MainActivity.kickId, 1, 1, 1, 0, 1);
             }
@@ -42,5 +43,8 @@ public class InstrumentTrack extends Thread{
             cursor++;
             if (cursor == beats) cursor = 0;
         }
+    }
+    public void stopp(){
+        playing = false;
     }
 }
